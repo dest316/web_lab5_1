@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title> Приветствие </title>
+</head>
+<body>
+<form method="get">
+	<p>Имя: <input type=text name=username value={{name}}></p>
+	<p>Пол:<br>
+		{% if gender == 'w' %}
+		<input type = radio name=gender checked value=w> Ж <br>
+		<input type = radio name=gender value=m> M
+		{% elif gender == 'm' %}
+		<input type = radio name=gender value=w> Ж <br>
+		<input type = radio name=gender checked value=m> M
+		{% else %}
+		<input type = radio name=gender value=w> Ж <br>
+		<input type = radio name=gender value=m> M
+		{% endif %}
+ 	</p>
+	<p>
+		Образовательная программа:
+ 		<select name=program>
+ 		{% for i in range(len(program_list)) %}
+			{% if i == program_id %}
+ 			<option selected value={{i}}>{{program_list[i]}}</option>
+			{% else %}
+			<option value={{i}}>{{program_list[i]}}</option>
+			{% endif %}
+ 		{% endfor %}
+ 		</select>
+	</p>
+	<p>
+	 Выберите дисциплины, которые Вы изучаете:<br>
+	 {% for i in range(len(subject_list)) %}
+	{% if subject_list[i] in subjects_select %}
+	 <input type = checkbox checked name=subject[] value={{i}}>
+	{% else %}
+	 <input type = checkbox name=subject[] value={{i}}>
+	{% endif %}
+	 {{subject_list[i]}}<br>
+	 {% endfor %}
+ 	</p>
+	<p>
+		<input type=submit value=Отправить>
+		<input type="submit" value="Очистить" name="reset">
+	</p>
+</form>
+
+{% if is_shown %}
+<div>
+	<p>
+		{% if name == '' %}
+		Введите имя, пожалуйста
+		{% else %}
+		Привет,
+		{% if gender == 'm' %}
+		студент
+		{% elif gender == 'w' %}
+		студентка
+		{% endif %}
+
+		{{name}}
+	</p>
+	<p>
+		Ваша образовательная программа: {{program}}.
+	</p>
+	<p>
+		{% if subjects_select|length == 0 %}
+		Вы не изучаете никаких дисциплин
+		{% else %}
+	Вы изучаете дисциплины:
+	{% for i in range(len(subjects_select)) %}
+		<a href={{url_for('subject', sub=subjects_select[i])}}>{{subjects_select[i]}}</a>
+		{% if i < len(subjects_select) - 1 %}
+		,
+		{% else %}
+		.
+		{% endif %}
+	{% endfor %}
+	{% endif %}
+ 	</p>
+		{% endif %}
+</div>
+{% endif %}
+</body>
+</html>
